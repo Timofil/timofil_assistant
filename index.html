@@ -1,80 +1,501 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Timafil assystent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timafil Assistant</title>
 
-    <style>
-        body {
-            background-color: #080b12;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background-color: #080b12;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        overflow-x: hidden;
+    }
+
+    /* ЭКРАН ЗАПУСКА */
+
+    #loadingScreen {
+        position: fixed;
+        inset: 0;
+        background-color: #080b12;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 1s ease;
+    }
+
+    #loadingLogo {
+        font-size: 50px;
+        letter-spacing: 8px;
+        color: #00eaff;
+        text-shadow:
+            0 0 5px #00eaff,
+            0 0 20px #00eaff,
+            0 0 40px #008cff;
+        animation: logoPulse 1.5s infinite alternate;
+    }
+
+    #loadingText {
+        margin-top: 20px;
+        color: #7defff;
+        font-size: 15px;
+        letter-spacing: 3px;
+    }
+
+    #loadingBar {
+        width: 280px;
+        height: 4px;
+        background-color: #17202c;
+        margin-top: 25px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    #loadingProgress {
+        width: 0%;
+        height: 100%;
+        background-color: #00eaff;
+        box-shadow: 0 0 15px #00eaff;
+        animation: loading 3s forwards;
+    }
+
+    @keyframes loading {
+        0% { width: 0%; }
+        30% { width: 35%; }
+        60% { width: 65%; }
+        100% { width: 100%; }
+    }
+
+    @keyframes logoPulse {
+        from { opacity: 0.6; }
+        to { opacity: 1; }
+    }
+
+    /* ОСНОВНОЙ САЙТ */
+
+    #mainContent {
+        display: none;
+        padding-top: 45px;
+        animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
         }
 
-        #problemButton {
-            color: #00eaff;
-            font-size: 22px;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 30px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #jarvisTitle {
+        font-size: 42px;
+        letter-spacing: 6px;
+        color: #00eaff;
+        text-transform: uppercase;
+        text-shadow:
+            0 0 5px #00eaff,
+            0 0 15px #00eaff,
+            0 0 30px #008cff;
+        margin-bottom: 5px;
+        animation: glow 2s infinite alternate;
+    }
+
+    #jarvisSubtitle {
+        color: #7defff;
+        font-size: 14px;
+        letter-spacing: 3px;
+        opacity: 0.8;
+    }
+
+    @keyframes glow {
+        from {
+            text-shadow:
+                0 0 5px #00eaff,
+                0 0 15px #00eaff;
+        }
+
+        to {
+            text-shadow:
+                0 0 10px #00eaff,
+                0 0 25px #00eaff,
+                0 0 45px #008cff;
+        }
+    }
+
+    /* ЯДРО */
+
+    #coreContainer {
+        width: 240px;
+        height: 240px;
+        margin: 35px auto 25px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #core {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle,
+            white 0%,
+            #00eaff 25%,
+            #008cff 55%,
+            #004b80 75%,
+            transparent 100%
+        );
+
+        box-shadow:
+            0 0 15px #00eaff,
+            0 0 35px #00eaff,
+            0 0 70px #008cff;
+
+        animation: corePulse 2s infinite ease-in-out;
+        z-index: 3;
+    }
+
+    .ring {
+        position: absolute;
+        border: 2px solid #00eaff;
+        border-radius: 50%;
+        box-shadow:
+            0 0 10px #00eaff,
+            inset 0 0 10px #00eaff;
+    }
+
+    #ring1 {
+        width: 130px;
+        height: 130px;
+        animation: rotateClockwise 6s linear infinite;
+    }
+
+    #ring2 {
+        width: 175px;
+        height: 175px;
+        border-style: dashed;
+        animation: rotateCounter 9s linear infinite;
+    }
+
+    #ring3 {
+        width: 215px;
+        height: 215px;
+        border-color: #008cff;
+        border-style: dotted;
+        animation: rotateClockwise 13s linear infinite;
+    }
+
+    .dot {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: #00eaff;
+        border-radius: 50%;
+        box-shadow: 0 0 12px #00eaff;
+    }
+
+    #dot1 {
+        top: 8px;
+        left: 116px;
+    }
+
+    #dot2 {
+        bottom: 8px;
+        left: 116px;
+    }
+
+    #dot3 {
+        left: 8px;
+        top: 116px;
+    }
+
+    #dot4 {
+        right: 8px;
+        top: 116px;
+    }
+
+    @keyframes corePulse {
+        0%, 100% {
+            transform: scale(0.9);
+            box-shadow:
+                0 0 15px #00eaff,
+                0 0 35px #00eaff,
+                0 0 70px #008cff;
+        }
+
+        50% {
+            transform: scale(1.08);
+            box-shadow:
+                0 0 25px #00eaff,
+                0 0 55px #00eaff,
+                0 0 100px #008cff;
+        }
+    }
+
+    @keyframes rotateClockwise {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes rotateCounter {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0deg); }
+    }
+
+    /* СТАТУС */
+
+    #status {
+        color: #7defff;
+        font-size: 13px;
+        letter-spacing: 3px;
+        height: 20px;
+        margin-top: -15px;
+        margin-bottom: 20px;
+    }
+
+    /* PROCESSING */
+
+    #coreContainer.processing #core {
+        animation: processingCore 0.45s infinite alternate;
+    }
+
+    #coreContainer.processing #ring1 {
+        animation-duration: 1.2s;
+    }
+
+    #coreContainer.processing #ring2 {
+        animation-duration: 1.6s;
+    }
+
+    #coreContainer.processing #ring3 {
+        animation-duration: 2s;
+    }
+
+    @keyframes processingCore {
+        from { transform: scale(0.85); }
+        to { transform: scale(1.2); }
+    }
+
+    /* LISTENING */
+
+    #coreContainer.listening #core {
+        animation: listeningCore 0.7s infinite alternate;
+    }
+
+    #coreContainer.listening .ring {
+        animation-duration: 2s;
+    }
+
+    #coreContainer.listening {
+        filter: brightness(1.5);
+    }
+
+    @keyframes listeningCore {
+        from {
+            transform: scale(0.8);
+        }
+
+        to {
+            transform: scale(1.15);
+        }
+    }
+
+    /* ОКНО */
+
+    #problemButton {
+        display: inline-block;
+        color: #00eaff;
+        font-size: 22px;
+        cursor: pointer;
+        margin-top: 15px;
+        padding: 12px 20px;
+        border: 1px solid #00eaff;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+    #problemButton:hover {
+        background-color: #00eaff;
+        color: #080b12;
+        box-shadow: 0 0 20px #00eaff;
+    }
+
+    #problemWindow {
+        display: none;
+        margin: 30px auto;
+        padding: 20px;
+        width: 80%;
+        max-width: 500px;
+        background-color: #111722;
+        border: 1px solid #00eaff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 234, 255, 0.15);
+    }
+
+    textarea {
+        width: 90%;
+        height: 120px;
+        background-color: #080b12;
+        color: white;
+        border: 1px solid #00eaff;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 16px;
+        resize: none;
+        outline: none;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #00eaff;
+        color: #080b12;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #voiceButton {
+        background-color: transparent;
+        color: #00eaff;
+        border: 1px solid #00eaff;
+        margin-left: 8px;
+    }
+
+    #voiceButton:hover {
+        background-color: #00eaff;
+        color: #080b12;
+        box-shadow: 0 0 15px #00eaff;
+    }
+
+    #answer {
+        margin-top: 20px;
+        color: #00eaff;
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+
+        #jarvisTitle {
+            font-size: 32px;
+        }
+
+        #loadingLogo {
+            font-size: 38px;
+        }
+
+        #coreContainer {
+            transform: scale(0.85);
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
 
         #problemWindow {
-            display: none;
-            margin: 30px auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 500px;
-            background-color: #111722;
-            border-radius: 15px;
-        }
-
-        textarea {
             width: 90%;
-            height: 120px;
-            background-color: #080b12;
-            color: white;
-            border: 1px solid #00eaff;
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 16px;
         }
+    }
+</style>
+```
 
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #00eaff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #answer {
-            margin-top: 20px;
-            color: #00eaff;
-            font-size: 18px;
-        }
-    </style>
 </head>
 
 <body>
 
-    <h1>привет это мой сайт помошник (в будущем)</h1>
+```
+<!-- ЭКРАН ЗАПУСКА -->
 
-    <p>здесь планируется мой ассистент для моих друзей и тд.</p>
+<div id="loadingScreen">
+
+    <div id="loadingLogo">
+        TIMAFIL
+    </div>
+
+    <div id="loadingText">
+        SYSTEM INITIALIZING...
+    </div>
+
+    <div id="loadingBar">
+        <div id="loadingProgress"></div>
+    </div>
+
+</div>
+
+
+<!-- ОСНОВНОЙ САЙТ -->
+
+<div id="mainContent">
+
+    <h1 id="jarvisTitle">TIMAFIL</h1>
+
+    <p id="jarvisSubtitle">
+        PERSONAL ASSISTANT
+    </p>
+
+
+    <!-- ЯДРО -->
+
+    <div id="coreContainer">
+
+        <div id="ring3" class="ring"></div>
+        <div id="ring2" class="ring"></div>
+        <div id="ring1" class="ring"></div>
+
+        <div id="core"></div>
+
+        <div id="dot1" class="dot"></div>
+        <div id="dot2" class="dot"></div>
+        <div id="dot3" class="dot"></div>
+        <div id="dot4" class="dot"></div>
+
+    </div>
+
+
+    <div id="status">
+        SYSTEM ONLINE
+    </div>
+
+
+    <p>
+        здесь планируется мой ассистент для моих друзей и тд.
+    </p>
+
+    <p>
+        пока что это демо версия в будущем планируется больше
+    </p>
+
 
     <div id="problemButton" onclick="openProblem()">
-        Опишите свою проблему
+        ОПИСАТЬ ПРОБЛЕМУ
     </div>
+
 
     <div id="problemWindow">
 
         <h2>Введите свою проблему</h2>
 
-        <textarea id="problem" placeholder="Напишите здесь..."></textarea>
+        <textarea
+            id="problem"
+            placeholder="Напишите здесь..."
+        ></textarea>
 
         <br>
 
@@ -82,53 +503,230 @@
             Получить ответ
         </button>
 
+        <button id="voiceButton" onclick="startVoice()">
+            🎤 Голос
+        </button>
+
         <div id="answer"></div>
 
     </div>
 
-    <script>
+</div>
 
-        function openProblem() {
-            document.getElementById("problemWindow").style.display = "block";
+
+<script>
+
+    /* ЗАПУСК */
+
+    setTimeout(function() {
+
+        document.getElementById("loadingScreen").style.opacity = "0";
+
+        setTimeout(function() {
+
+            document.getElementById("loadingScreen").style.display = "none";
+
+            document.getElementById("mainContent").style.display = "block";
+
+        }, 1000);
+
+    }, 3000);
+
+
+    /* ОКНО */
+
+    function openProblem() {
+        document.getElementById("problemWindow").style.display = "block";
+    }
+
+
+    /* ГОЛОСОВОЙ ВВОД */
+
+    function startVoice() {
+
+        const SpeechRecognition =
+            window.SpeechRecognition ||
+            window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+
+            document.getElementById("status").innerText =
+                "VOICE NOT SUPPORTED";
+
+            return;
         }
 
-        function getAnswer() {
+        const recognition = new SpeechRecognition();
 
-            let problem = document.getElementById("problem").value;
+        recognition.lang = "ru-RU";
+        recognition.interimResults = false;
+        recognition.continuous = false;
 
-            if (problem.trim() === "") {
-                document.getElementById("answer").innerText =
-                    "Пожалуйста, сначала напишите свою проблему.";
-                return;
-            }
 
-            let answers = [
-                "Попробуй спокойно разобраться в ситуации и не торопись с решением.",
+        const coreContainer =
+            document.getElementById("coreContainer");
 
-                "Иногда полезно сделать небольшую паузу и посмотреть на проблему с другой стороны.",
+        const status =
+            document.getElementById("status");
 
-                "Попробуй поговорить с человеком, которому ты доверяешь.",
+        const problem =
+            document.getElementById("problem");
 
-                "Раздели проблему на несколько частей и решай их по очереди.",
 
-                "Подумай о нескольких возможных решениях и выбери то, которое кажется тебе наиболее подходящим.",
+        /* Включаем LISTENING */
 
-                "Не переживай раньше времени. Иногда проблема оказывается проще, чем кажется.",
+        coreContainer.classList.remove("processing");
+        coreContainer.classList.add("listening");
 
-                "ыхыхыхы ебать ты лох", 
+        status.innerText = "LISTENING...";
 
-                "мне похуй",
 
-                "а да нууу нафиг,книга братан иди ка сюда",
-            ];
+        recognition.start();
 
-            let randomIndex = Math.floor(Math.random() * answers.length);
+
+        /* Когда голос распознан */
+
+        recognition.onresult = function(event) {
+
+            const text =
+                event.results[0][0].transcript;
+
+            problem.value = text;
+
+        };
+
+
+        /* Когда запись закончилась */
+
+        recognition.onend = function() {
+
+            coreContainer.classList.remove("listening");
+
+            status.innerText = "SYSTEM ONLINE";
+
+        };
+
+
+        /* Ошибка */
+
+        recognition.onerror = function() {
+
+            coreContainer.classList.remove("listening");
+
+            status.innerText = "VOICE ERROR";
+
+        };
+
+    }
+
+
+    /* ГЕНЕРАЦИЯ ОТВЕТА */
+
+    function getAnswer() {
+
+        let problem =
+            document.getElementById("problem").value;
+
+        if (problem.trim() === "") {
 
             document.getElementById("answer").innerText =
-                answers[randomIndex];
+                "Пожалуйста, сначала напишите свою проблему.";
+
+            return;
         }
 
-    </script>
+
+        let coreContainer =
+            document.getElementById("coreContainer");
+
+        let status =
+            document.getElementById("status");
+
+        let answer =
+            document.getElementById("answer");
+
+
+        coreContainer.classList.add("processing");
+
+        status.innerText = "PROCESSING...";
+
+        answer.innerText = "";
+
+
+        setTimeout(function() {
+
+            let answers = [
+
+    "Попробуй спокойно разобраться в ситуации и не торопись с решением.",
+
+    "Иногда полезно сделать небольшую паузу и посмотреть на проблему с другой стороны.",
+
+    "Попробуй поговорить с человеком, которому ты доверяешь.",
+
+    "Раздели проблему на несколько частей и решай их по очереди.",
+
+    "Подумай о нескольких возможных решениях и выбери то, которое кажется тебе наиболее подходящим.",
+
+    "Не переживай раньше времени. Иногда проблема оказывается проще, чем кажется.",
+
+    "ыхыхыхы ебать ты лох",
+
+    "мне похуй",
+
+    "а да нууу нафиг, книга братан иди ка сюда",
+
+    "Ялквмом",
+
+    "Ты пишешь мне хуйню",
+
+    "Поплачь",
+
+    "Давай чтобы ты не расстраивался, я тебе шутку расскажу.",
+
+    "Не шути больше",
+
+    "Сынок, мы разочарованы",
+
+    "Пиздец..",
+
+    "Соболезную, это очень тяжело",
+
+    "Когда-нибудь точно всё наладится",
+
+    "Я там на курьеров никогда не пизжу.",
+
+    "Ахуеть",
+
+    "Мне пох короче, давай в жопу",
+
+    "Ты будешь заниматься?",
+
+    "От такого я аж заплакал",
+
+    "вась",
+
+    "связь"
+
+];
+
+            let randomIndex =
+                Math.floor(Math.random() * answers.length);
+
+
+            answer.innerText =
+                answers[randomIndex];
+
+
+            coreContainer.classList.remove("processing");
+
+            status.innerText = "SYSTEM ONLINE";
+
+        }, 1800);
+
+    }
+
+</script>
+```
 
 </body>
 </html>
