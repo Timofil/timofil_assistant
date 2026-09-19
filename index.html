@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Timafil assystent</title>
+
+    <style>
+        body {
+            background-color: #080b12;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        #problemButton {
+            color: #00eaff;
+            font-size: 22px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 30px;
+        }
+
+        #problemWindow {
+            display: none;
+            margin: 30px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            background-color: #111722;
+            border-radius: 15px;
+        }
+
+        textarea {
+            width: 90%;
+            height: 120px;
+            background-color: #080b12;
+            color: white;
+            border: 1px solid #00eaff;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #00eaff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #answer {
+            margin-top: 20px;
+            color: #00eaff;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>привет это мой сайт помошник (в будущем)</h1>
+
+    <p>здесь планируется мой ассистент для моих друзей и тд.</p>
+
+    <div id="problemButton" onclick="openProblem()">
+        Опишите свою проблему
+    </div>
+
+    <div id="problemWindow">
+
+        <h2>Введите свою проблему</h2>
+
+        <textarea id="problem" placeholder="Напишите здесь..."></textarea>
+
+        <br>
+
+        <button onclick="getAnswer()">
+            Получить ответ
+        </button>
+
+        <div id="answer"></div>
+
+    </div>
+
+    <script>
+
+        function openProblem() {
+            document.getElementById("problemWindow").style.display = "block";
+        }
+
+        function getAnswer() {
+
+            let problem = document.getElementById("problem").value;
+
+            if (problem.trim() === "") {
+                document.getElementById("answer").innerText =
+                    "Пожалуйста, сначала напишите свою проблему.";
+                return;
+            }
+
+            let answers = [
+                "Попробуй спокойно разобраться в ситуации и не торопись с решением.",
+
+                "Иногда полезно сделать небольшую паузу и посмотреть на проблему с другой стороны.",
+
+                "Попробуй поговорить с человеком, которому ты доверяешь.",
+
+                "Раздели проблему на несколько частей и решай их по очереди.",
+
+                "Подумай о нескольких возможных решениях и выбери то, которое кажется тебе наиболее подходящим.",
+
+                "Не переживай раньше времени. Иногда проблема оказывается проще, чем кажется.",
+
+                "ыхыхыхы ебать ты лох", 
+
+                "мне похуй",
+
+                "а да нууу нафиг,книга братан иди ка сюда",
+            ];
+
+            let randomIndex = Math.floor(Math.random() * answers.length);
+
+            document.getElementById("answer").innerText =
+                answers[randomIndex];
+        }
+
+    </script>
+
+</body>
+</html>
