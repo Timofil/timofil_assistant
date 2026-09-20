@@ -1,450 +1,775 @@
 <!DOCTYPE html>
+<html lang="ru">
 
-<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timafil Assistant</title>
 
-```
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TIMAFIL ASSISTANT</title>
+
 <style>
-    * {
-        box-sizing: border-box;
-    }
 
-    body {
-        margin: 0;
-        background-color: #080b12;
-        color: white;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        overflow-x: hidden;
-    }
+/* =========================
+   ОСНОВА
+========================= */
 
-    /* ЭКРАН ЗАПУСКА */
+* {
+    box-sizing: border-box;
+}
 
-    #loadingScreen {
-        position: fixed;
-        inset: 0;
-        background-color: #080b12;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        transition: opacity 1s ease;
-    }
+body {
+    margin: 0;
+    background: #05070b;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+}
 
-    #loadingLogo {
-        font-size: 50px;
-        letter-spacing: 8px;
-        color: #00eaff;
-        text-shadow:
-            0 0 5px #00eaff,
-            0 0 20px #00eaff,
-            0 0 40px #008cff;
-        animation: logoPulse 1.5s infinite alternate;
-    }
+button {
+    background: #080b12;
+    color: #00eaff;
+    border: 1px solid #00eaff;
+    padding: 12px 20px;
+    margin: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    box-shadow: 0 0 10px rgba(0,234,255,.2);
+}
 
-    #loadingText {
-        margin-top: 20px;
-        color: #7defff;
-        font-size: 15px;
-        letter-spacing: 3px;
-    }
+button:hover {
+    background: #00eaff;
+    color: #05070b;
+    box-shadow: 0 0 25px #00eaff;
+}
 
-    #loadingBar {
-        width: 280px;
-        height: 4px;
-        background-color: #17202c;
-        margin-top: 25px;
-        border-radius: 10px;
-        overflow: hidden;
-    }
+input,
+textarea {
+    background: #080b12;
+    color: white;
+    border: 1px solid #00eaff;
+    border-radius: 10px;
+    padding: 12px;
+    outline: none;
+}
 
-    #loadingProgress {
+
+/* =========================
+   ЗАГРУЗКА
+========================= */
+
+#loadingScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: #05070b;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 9999;
+
+    transition: opacity 1s;
+}
+
+.loadingTitle {
+
+    color: #00eaff;
+
+    font-size: 55px;
+
+    font-weight: bold;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 30px #008cff;
+}
+
+.loadingText {
+
+    color: #00eaff;
+
+    margin-top: 10px;
+}
+
+.loadingBar {
+
+    width: 250px;
+
+    height: 5px;
+
+    background: #111722;
+
+    margin-top: 25px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+}
+
+.loadingProgress {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: #00eaff;
+
+    box-shadow: 0 0 15px #00eaff;
+
+    animation: loading 3s linear forwards;
+}
+
+@keyframes loading {
+
+    from {
         width: 0%;
-        height: 100%;
-        background-color: #00eaff;
-        box-shadow: 0 0 15px #00eaff;
-        animation: loading 3s forwards;
     }
 
-    @keyframes loading {
-        0% { width: 0%; }
-        30% { width: 35%; }
-        60% { width: 65%; }
-        100% { width: 100%; }
+    to {
+        width: 100%;
+    }
+}
+
+
+/* =========================
+   ОСНОВНОЙ КОНТЕНТ
+========================= */
+
+#mainContent {
+
+    display: none;
+
+    padding: 30px 15px;
+}
+
+#jarvisTitle {
+
+    font-size: 55px;
+
+    margin: 10px 0 0;
+
+    color: #00eaff;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 30px #008cff;
+}
+
+#jarvisSubtitle {
+
+    color: #8eefff;
+
+    letter-spacing: 4px;
+}
+
+
+/* =========================
+   ЯДРО
+========================= */
+
+#coreContainer {
+
+    position: relative;
+
+    width: 280px;
+
+    height: 280px;
+
+    margin: 30px auto;
+}
+
+#core {
+
+    position: absolute;
+
+    width: 100px;
+
+    height: 100px;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    border: 3px solid #00eaff;
+
+    background: #071018;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #00eaff;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 0 20px #00eaff,
+        0 0 60px #008cff;
+
+    z-index: 5;
+}
+
+.ring {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    border-radius: 50%;
+
+    border: 2px solid #00eaff;
+
+    transform: translate(-50%, -50%);
+
+    opacity: .7;
+}
+
+#ring1 {
+
+    width: 150px;
+    height: 150px;
+
+    animation: rotate1 5s linear infinite;
+}
+
+#ring2 {
+
+    width: 200px;
+    height: 200px;
+
+    border-style: dashed;
+
+    animation: rotate2 7s linear infinite reverse;
+}
+
+#ring3 {
+
+    width: 250px;
+    height: 250px;
+
+    border-style: dotted;
+
+    animation: rotate1 10s linear infinite;
+}
+
+@keyframes rotate1 {
+
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
-    @keyframes logoPulse {
-        from { opacity: 0.6; }
-        to { opacity: 1; }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes rotate2 {
+
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
-    /* ОСНОВНОЙ САЙТ */
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
 
-    #mainContent {
-        display: none;
-        padding-top: 45px;
-        animation: appear 1s ease;
+.dot {
+
+    position: absolute;
+
+    width: 8px;
+
+    height: 8px;
+
+    background: #00eaff;
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 15px #00eaff;
+}
+
+.dot1 {
+    top: 20px;
+    left: 135px;
+}
+
+.dot2 {
+    top: 135px;
+    right: 15px;
+}
+
+.dot3 {
+    bottom: 20px;
+    left: 135px;
+}
+
+.dot4 {
+    top: 135px;
+    left: 15px;
+}
+
+
+/* =========================
+   СТАТУС
+========================= */
+
+#status {
+
+    color: #00eaff;
+
+    font-weight: bold;
+
+    margin: 15px;
+}
+
+
+/* =========================
+   ПОМОЩНИК
+========================= */
+
+#problemWindow {
+
+    margin: 20px auto;
+
+    padding: 25px;
+
+    width: 95%;
+
+    max-width: 700px;
+
+    background: #0b1018;
+
+    border: 1px solid #00eaff;
+
+    border-radius: 15px;
+
+    box-shadow: 0 0 30px rgba(0,234,255,.15);
+}
+
+textarea {
+
+    width: 90%;
+
+    max-width: 600px;
+
+    height: 100px;
+
+    resize: vertical;
+}
+
+#answer {
+
+    min-height: 70px;
+
+    margin-top: 20px;
+
+    color: #00eaff;
+
+    font-size: 20px;
+
+    white-space: pre-line;
+}
+
+.processing {
+
+    animation: processing .5s infinite alternate;
+}
+
+@keyframes processing {
+
+    from {
+        opacity: .3;
     }
 
-    @keyframes appear {
-        from {
-            opacity: 0;
-            transform: translateY(15px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    to {
+        opacity: 1;
     }
+}
 
-    #jarvisTitle {
-        font-size: 42px;
-        letter-spacing: 6px;
-        color: #00eaff;
-        text-transform: uppercase;
-        text-shadow:
-            0 0 5px #00eaff,
-            0 0 15px #00eaff,
-            0 0 30px #008cff;
-        margin-bottom: 5px;
-        animation: glow 2s infinite alternate;
-    }
 
-    #jarvisSubtitle {
-        color: #7defff;
-        font-size: 14px;
-        letter-spacing: 3px;
-        opacity: 0.8;
-    }
+/* ==================================================
+   РУЛЕТКА
+================================================== */
 
-    @keyframes glow {
-        from {
-            text-shadow:
-                0 0 5px #00eaff,
-                0 0 15px #00eaff;
-        }
+#rouletteWindow {
 
-        to {
-            text-shadow:
-                0 0 10px #00eaff,
-                0 0 25px #00eaff,
-                0 0 45px #008cff;
-        }
-    }
+    display: none;
 
-    /* ЯДРО */
+    margin: 30px auto;
 
-    #coreContainer {
-        width: 240px;
-        height: 240px;
-        margin: 35px auto 25px;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    padding: 25px;
 
-    #core {
-        width: 75px;
-        height: 75px;
-        border-radius: 50%;
-        background: radial-gradient(
-            circle,
-            white 0%,
-            #00eaff 25%,
-            #008cff 55%,
-            #004b80 75%,
-            transparent 100%
+    width: 95%;
+
+    max-width: 600px;
+
+    background: #111722;
+
+    border: 1px solid #00eaff;
+
+    border-radius: 15px;
+
+    box-shadow: 0 0 30px rgba(0,234,255,.2);
+}
+
+#rouletteWindow input {
+
+    width: 90%;
+
+    max-width: 450px;
+
+    padding: 13px;
+
+    background: #080b12;
+
+    color: white;
+
+    border: 1px solid #00eaff;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    text-align: center;
+
+    font-size: 16px;
+}
+
+
+/* ОБЛАСТЬ */
+
+#rouletteArea {
+
+    position: relative;
+
+    width: 310px;
+
+    height: 330px;
+
+    margin: 25px auto;
+}
+
+
+/* УКАЗАТЕЛЬ */
+
+#roulettePointer {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    color: white;
+
+    font-size: 38px;
+
+    z-index: 100;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 20px #00eaff;
+}
+
+
+/* ==================================================
+   КОЛЕСО
+================================================== */
+
+#rouletteWheel {
+
+    position: absolute;
+
+    width: 250px;
+
+    height: 250px;
+
+    left: 30px;
+
+    top: 35px;
+
+    border-radius: 50%;
+
+    border: 5px solid #00eaff;
+
+    background:
+        conic-gradient(
+
+            #00eaff 0deg 30deg,
+
+            #111722 30deg 60deg,
+
+            #00eaff 60deg 90deg,
+
+            #111722 90deg 120deg,
+
+            #00eaff 120deg 150deg,
+
+            #111722 150deg 180deg,
+
+            #00eaff 180deg 210deg,
+
+            #111722 210deg 240deg,
+
+            #00eaff 240deg 270deg,
+
+            #111722 270deg 300deg,
+
+            #00eaff 300deg 330deg,
+
+            #111722 330deg 360deg
         );
 
-        box-shadow:
-            0 0 15px #00eaff,
-            0 0 35px #00eaff,
-            0 0 70px #008cff;
+    box-shadow:
 
-        animation: corePulse 2s infinite ease-in-out;
-        z-index: 3;
-    }
+        0 0 20px #00eaff,
 
-    .ring {
-        position: absolute;
-        border: 2px solid #00eaff;
-        border-radius: 50%;
-        box-shadow:
-            0 0 10px #00eaff,
-            inset 0 0 10px #00eaff;
-    }
+        0 0 50px #008cff;
 
-    #ring1 {
-        width: 130px;
-        height: 130px;
-        animation: rotateClockwise 6s linear infinite;
-    }
+    transition:
 
-    #ring2 {
-        width: 175px;
-        height: 175px;
-        border-style: dashed;
-        animation: rotateCounter 9s linear infinite;
-    }
+        transform 4.2s cubic-bezier(.15,.8,.15,1);
 
-    #ring3 {
-        width: 215px;
-        height: 215px;
-        border-color: #008cff;
-        border-style: dotted;
-        animation: rotateClockwise 13s linear infinite;
-    }
+    overflow: hidden;
+}
 
-    .dot {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        background-color: #00eaff;
-        border-radius: 50%;
-        box-shadow: 0 0 12px #00eaff;
-    }
 
-    #dot1 {
-        top: 8px;
-        left: 116px;
-    }
+/* ==================================================
+   СЕКТОР
+================================================== */
 
-    #dot2 {
-        bottom: 8px;
-        left: 116px;
-    }
+.sector {
 
-    #dot3 {
-        left: 8px;
-        top: 116px;
-    }
+    position: absolute;
 
-    #dot4 {
-        right: 8px;
-        top: 116px;
-    }
+    width: 50%;
 
-    @keyframes corePulse {
-        0%, 100% {
-            transform: scale(0.9);
-            box-shadow:
-                0 0 15px #00eaff,
-                0 0 35px #00eaff,
-                0 0 70px #008cff;
-        }
+    height: 50%;
 
-        50% {
-            transform: scale(1.08);
-            box-shadow:
-                0 0 25px #00eaff,
-                0 0 55px #00eaff,
-                0 0 100px #008cff;
-        }
-    }
+    left: 25%;
 
-    @keyframes rotateClockwise {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
+    top: 0;
 
-    @keyframes rotateCounter {
-        from { transform: rotate(360deg); }
-        to { transform: rotate(0deg); }
-    }
+    transform-origin: 50% 100%;
 
-    /* СТАТУС */
+    display: flex;
 
-    #status {
-        color: #7defff;
-        font-size: 13px;
-        letter-spacing: 3px;
-        height: 20px;
-        margin-top: -15px;
-        margin-bottom: 20px;
-    }
+    justify-content: flex-start;
 
-    /* PROCESSING */
+    align-items: center;
 
-    #coreContainer.processing #core {
-        animation: processingCore 0.45s infinite alternate;
-    }
+    flex-direction: column;
 
-    #coreContainer.processing #ring1 {
-        animation-duration: 1.2s;
-    }
+    padding-top: 8px;
 
-    #coreContainer.processing #ring2 {
-        animation-duration: 1.6s;
-    }
+    color: white;
 
-    #coreContainer.processing #ring3 {
-        animation-duration: 2s;
-    }
+    font-weight: bold;
 
-    @keyframes processingCore {
-        from { transform: scale(0.85); }
-        to { transform: scale(1.2); }
-    }
+    pointer-events: none;
 
-    /* LISTENING */
+    z-index: 5;
+}
 
-    #coreContainer.listening #core {
-        animation: listeningCore 0.7s infinite alternate;
-    }
 
-    #coreContainer.listening .ring {
-        animation-duration: 2s;
-    }
+/* НАЗВАНИЕ ПРЕДМЕТА */
 
-    #coreContainer.listening {
-        filter: brightness(1.5);
-    }
+.sectorText {
 
-    @keyframes listeningCore {
-        from {
-            transform: scale(0.8);
-        }
+    width: 75px;
 
-        to {
-            transform: scale(1.15);
-        }
-    }
+    max-height: 22px;
 
-    /* ОКНО */
+    overflow: hidden;
 
-    #problemButton {
-        display: inline-block;
-        color: #00eaff;
-        font-size: 22px;
-        cursor: pointer;
-        margin-top: 15px;
-        padding: 12px 20px;
-        border: 1px solid #00eaff;
-        border-radius: 10px;
-        transition: 0.3s;
-    }
+    text-align: center;
 
-    #problemButton:hover {
-        background-color: #00eaff;
-        color: #080b12;
-        box-shadow: 0 0 20px #00eaff;
-    }
+    font-size: 8px;
 
-    #problemWindow {
-        display: none;
-        margin: 30px auto;
-        padding: 20px;
-        width: 80%;
-        max-width: 500px;
-        background-color: #111722;
-        border: 1px solid #00eaff;
-        border-radius: 15px;
-        box-shadow: 0 0 20px rgba(0, 234, 255, 0.15);
-    }
+    line-height: 9px;
 
-    textarea {
-        width: 90%;
-        height: 120px;
-        background-color: #080b12;
-        color: white;
-        border: 1px solid #00eaff;
-        border-radius: 10px;
-        padding: 10px;
-        font-size: 16px;
-        resize: none;
-        outline: none;
-    }
+    color: white;
 
-    button {
-        margin-top: 15px;
-        padding: 10px 20px;
-        background-color: #00eaff;
-        color: #080b12;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-    }
+    word-break: break-word;
 
-    #voiceButton {
-        background-color: transparent;
-        color: #00eaff;
-        border: 1px solid #00eaff;
-        margin-left: 8px;
-    }
+    text-shadow:
+        0 0 4px #000,
+        0 0 8px #000;
+}
 
-    #voiceButton:hover {
-        background-color: #00eaff;
-        color: #080b12;
-        box-shadow: 0 0 15px #00eaff;
-    }
 
-    #answer {
-        margin-top: 20px;
-        color: #00eaff;
-        font-size: 18px;
-        line-height: 1.5;
-    }
+/* КОЭФФИЦИЕНТ */
 
-    @media (max-width: 600px) {
+.multiplier {
 
-        #jarvisTitle {
-            font-size: 32px;
-        }
+    margin-top: 2px;
 
-        #loadingLogo {
-            font-size: 38px;
-        }
+    font-size: 17px;
 
-        #coreContainer {
-            transform: scale(0.85);
-            margin-top: 15px;
-            margin-bottom: 5px;
-        }
+    line-height: 18px;
 
-        #problemWindow {
-            width: 90%;
-        }
-    }
+    color: #00eaff;
+
+    font-weight: bold;
+
+    text-shadow:
+        0 0 5px #00eaff,
+        0 0 12px #00eaff;
+}
+
+
+/* ==================================================
+   12 ПОЗИЦИЙ
+================================================== */
+
+.s1  { transform: rotate(15deg); }
+.s2  { transform: rotate(45deg); }
+.s3  { transform: rotate(75deg); }
+.s4  { transform: rotate(105deg); }
+.s5  { transform: rotate(135deg); }
+.s6  { transform: rotate(165deg); }
+.s7  { transform: rotate(195deg); }
+.s8  { transform: rotate(225deg); }
+.s9  { transform: rotate(255deg); }
+.s10 { transform: rotate(285deg); }
+.s11 { transform: rotate(315deg); }
+.s12 { transform: rotate(345deg); }
+
+/* ==================================================
+   ЦЕНТР
+================================================== */
+
+#rouletteCore {
+
+    position: absolute;
+
+    width: 75px;
+
+    height: 75px;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #080b12;
+
+    border: 3px solid #00eaff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #00eaff;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    box-shadow: 0 0 20px #00eaff;
+
+    z-index: 20;
+}
+
+
+/* РЕЗУЛЬТАТ */
+
+#rouletteResult {
+
+    min-height: 75px;
+
+    margin-top: 20px;
+
+    color: #00eaff;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    white-space: pre-line;
+}
+
+.rouletteWin {
+
+    color: #00ff88 !important;
+
+    text-shadow: 0 0 20px #00ff88;
+}
+
+.rouletteLose {
+
+    color: #ff3355 !important;
+
+    text-shadow: 0 0 20px #ff3355;
+}
+
 </style>
-```
 
 </head>
 
+
 <body>
 
-```
-<!-- ЭКРАН ЗАПУСКА -->
+
+<!-- ==================================================
+     ЗАГРУЗКА
+================================================== -->
 
 <div id="loadingScreen">
 
-    <div id="loadingLogo">
+    <div class="loadingTitle">
         TIMAFIL
     </div>
 
-    <div id="loadingText">
+    <div class="loadingText">
         SYSTEM INITIALIZING...
     </div>
 
-    <div id="loadingBar">
-        <div id="loadingProgress"></div>
+    <div class="loadingBar">
+
+        <div class="loadingProgress"></div>
+
     </div>
 
 </div>
 
 
-<!-- ОСНОВНОЙ САЙТ -->
+<!-- ==================================================
+     ОСНОВНОЙ САЙТ
+================================================== -->
 
 <div id="mainContent">
 
-    <h1 id="jarvisTitle">TIMAFIL</h1>
+    <h1 id="jarvisTitle">
+        TIMAFIL
+    </h1>
 
     <p id="jarvisSubtitle">
         PERSONAL ASSISTANT
@@ -455,16 +780,23 @@
 
     <div id="coreContainer">
 
-        <div id="ring3" class="ring"></div>
-        <div id="ring2" class="ring"></div>
         <div id="ring1" class="ring"></div>
 
-        <div id="core"></div>
+        <div id="ring2" class="ring"></div>
 
-        <div id="dot1" class="dot"></div>
-        <div id="dot2" class="dot"></div>
-        <div id="dot3" class="dot"></div>
-        <div id="dot4" class="dot"></div>
+        <div id="ring3" class="ring"></div>
+
+        <div class="dot dot1"></div>
+
+        <div class="dot dot2"></div>
+
+        <div class="dot dot3"></div>
+
+        <div class="dot dot4"></div>
+
+        <div id="core">
+            TIMAFIL
+        </div>
 
     </div>
 
@@ -474,40 +806,257 @@
     </div>
 
 
-    <p>
-        здесь планируется мой ассистент для моих друзей и тд.
-    </p>
-
-    <p>
-        пока что это демо версия в будущем планируется больше
-    </p>
-
-
-    <div id="problemButton" onclick="openProblem()">
-        ОПИСАТЬ ПРОБЛЕМУ
-    </div>
-
+    <!-- ==================================================
+         ПОМОЩНИК
+    ================================================== -->
 
     <div id="problemWindow">
 
-        <h2>Введите свою проблему</h2>
+        <h2>
+            🤖 TIMAFIL ASSISTANT
+        </h2>
+
+        <p>
+            Опиши свою проблему
+        </p>
 
         <textarea
             id="problem"
-            placeholder="Напишите здесь..."
+            placeholder="Напиши сюда..."
         ></textarea>
 
         <br>
 
         <button onclick="getAnswer()">
-            Получить ответ
+            ПОЛУЧИТЬ ОТВЕТ
         </button>
 
-        <button id="voiceButton" onclick="startVoice()">
-            🎤 Голос
+        <button onclick="startVoice()">
+            🎤 ГОЛОС(Good boy)
         </button>
 
         <div id="answer"></div>
+
+    </div>
+
+
+    <button onclick="openRoulette()">
+        🎰 ОТКРЫТЬ ЛОХОТРОН
+    </button>
+
+
+    <!-- ==================================================
+         РУЛЕТКА
+    ================================================== -->
+
+    <div id="rouletteWindow">
+
+        <h2>
+            🎰 DIGITAL MINET
+        </h2>
+
+        <p>
+            Чё ты вась,ставь что нибудь
+        </p>
+
+        <input
+            id="rouletteItem"
+            type="text"
+            placeholder="Например: 100 очков"
+            maxlength="25"
+        >
+
+
+        <div id="rouletteArea">
+
+            <div id="roulettePointer">
+                ▼
+            </div>
+
+
+            <!-- КОЛЕСО -->
+
+            <div id="rouletteWheel">
+
+
+                <div class="sector s1">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×1
+                    </span>
+
+                </div>
+
+
+                <div class="sector s2">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×2
+                    </span>
+
+                </div>
+
+
+                <div class="sector s3">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×1
+                    </span>
+
+                </div>
+
+
+                <div class="sector s4">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×3
+                    </span>
+
+                </div>
+
+
+                <div class="sector s5">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×1
+                    </span>
+
+                </div>
+
+
+                <div class="sector s6">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×2
+                    </span>
+
+                </div>
+
+
+                <div class="sector s7">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×1
+                    </span>
+
+                </div>
+
+
+                <div class="sector s8">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×5
+                    </span>
+
+                </div>
+
+
+                <div class="sector s9">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×1
+                    </span>
+
+                </div>
+
+
+                <div class="sector s10">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×2
+                    </span>
+
+                </div>
+
+
+                <div class="sector s11">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×1
+                    </span>
+
+                </div>
+
+
+                <div class="sector s12">
+
+                    <span class="sectorText">
+                        ПРЕДМЕТ
+                    </span>
+
+                    <span class="multiplier">
+                        ×0
+                    </span>
+
+                </div>
+
+
+                <!-- ЦЕНТР -->
+
+                <div id="rouletteCore">
+                    TIMAFIL
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <button onclick="spinRoulette()">
+            🎰 КРУТИТЬ
+        </button>
+
+        <button onclick="closeRoulette()">
+            ЗАКРЫТЬ
+        </button>
+
+
+        <div id="rouletteResult"></div>
 
     </div>
 
@@ -516,146 +1065,40 @@
 
 <script>
 
-    /* ЗАПУСК */
+/* ==================================================
+   ЗАГРУЗКА
+================================================== */
+
+setTimeout(function() {
+
+    const loading =
+        document.getElementById(
+            "loadingScreen"
+        );
+
+    const main =
+        document.getElementById(
+            "mainContent"
+        );
+
+    loading.style.opacity = "0";
 
     setTimeout(function() {
 
-        document.getElementById("loadingScreen").style.opacity = "0";
+        loading.style.display = "none";
 
-        setTimeout(function() {
+        main.style.display = "block";
 
-            document.getElementById("loadingScreen").style.display = "none";
+    }, 1000);
 
-            document.getElementById("mainContent").style.display = "block";
+}, 3000);
 
-        }, 1000);
 
-    }, 3000);
+/* ==================================================
+   ОТВЕТЫ
+================================================== */
 
-
-    /* ОКНО */
-
-    function openProblem() {
-        document.getElementById("problemWindow").style.display = "block";
-    }
-
-
-    /* ГОЛОСОВОЙ ВВОД */
-
-    function startVoice() {
-
-        const SpeechRecognition =
-            window.SpeechRecognition ||
-            window.webkitSpeechRecognition;
-
-        if (!SpeechRecognition) {
-
-            document.getElementById("status").innerText =
-                "VOICE NOT SUPPORTED";
-
-            return;
-        }
-
-        const recognition = new SpeechRecognition();
-
-        recognition.lang = "ru-RU";
-        recognition.interimResults = false;
-        recognition.continuous = false;
-
-
-        const coreContainer =
-            document.getElementById("coreContainer");
-
-        const status =
-            document.getElementById("status");
-
-        const problem =
-            document.getElementById("problem");
-
-
-        /* Включаем LISTENING */
-
-        coreContainer.classList.remove("processing");
-        coreContainer.classList.add("listening");
-
-        status.innerText = "LISTENING...";
-
-
-        recognition.start();
-
-
-        /* Когда голос распознан */
-
-        recognition.onresult = function(event) {
-
-            const text =
-                event.results[0][0].transcript;
-
-            problem.value = text;
-
-        };
-
-
-        /* Когда запись закончилась */
-
-        recognition.onend = function() {
-
-            coreContainer.classList.remove("listening");
-
-            status.innerText = "SYSTEM ONLINE";
-
-        };
-
-
-        /* Ошибка */
-
-        recognition.onerror = function() {
-
-            coreContainer.classList.remove("listening");
-
-            status.innerText = "VOICE ERROR";
-
-        };
-
-    }
-
-
-    /* ГЕНЕРАЦИЯ ОТВЕТА */
-
-    function getAnswer() {
-
-        let problem =
-            document.getElementById("problem").value;
-
-        if (problem.trim() === "") {
-
-            document.getElementById("answer").innerText =
-                "Пожалуйста, сначала напишите свою проблему.";
-
-            return;
-        }
-
-
-        let coreContainer =
-            document.getElementById("coreContainer");
-
-        let status =
-            document.getElementById("status");
-
-        let answer =
-            document.getElementById("answer");
-
-
-        coreContainer.classList.add("processing");
-
-        status.innerText = "PROCESSING...";
-
-        answer.innerText = "";
-
-
-        setTimeout(function() {
-
-            let answers = [
+let answers = [
 
     "Попробуй спокойно разобраться в ситуации и не торопись с решением.",
 
@@ -665,7 +1108,7 @@
 
     "Раздели проблему на несколько частей и решай их по очереди.",
 
-    "Подумай о нескольких возможных решениях и выбери то, которое кажется тебе наиболее подходящим.",
+    "Подумай о нескольких возможных решениях и выбери подходящее.",
 
     "Не переживай раньше времени. Иногда проблема оказывается проще, чем кажется.",
 
@@ -709,24 +1152,383 @@
 
 ];
 
-            let randomIndex =
-                Math.floor(Math.random() * answers.length);
+
+function getAnswer() {
+
+    const problem =
+        document.getElementById(
+            "problem"
+        );
+
+    const answer =
+        document.getElementById(
+            "answer"
+        );
+
+    const status =
+        document.getElementById(
+            "status"
+        );
 
 
-            answer.innerText =
-                answers[randomIndex];
+    if (
+        problem.value.trim() === ""
+    ) {
+
+        answer.innerText =
+            "Пожалуйста, сначала напишите свою проблему.";
+
+        return;
+    }
 
 
-            coreContainer.classList.remove("processing");
+    answer.className =
+        "processing";
 
-            status.innerText = "SYSTEM ONLINE";
+    answer.innerText =
+        "ANALYZING...";
 
-        }, 1800);
+    status.innerText =
+        "PROCESSING...";
+
+
+    setTimeout(function() {
+
+        const random =
+            Math.floor(
+                Math.random() *
+                answers.length
+            );
+
+        answer.className = "";
+
+        answer.innerText =
+            answers[random];
+
+        status.innerText =
+            "SYSTEM ONLINE";
+
+    }, 1800);
+
+}
+
+
+/* ==================================================
+   ГОЛОС
+================================================== */
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+let recognition = null;
+
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "ru-RU";
+
+    recognition.interimResults =
+        false;
+
+    recognition.continuous =
+        false;
+
+
+    recognition.onstart =
+        function() {
+
+            document.getElementById(
+                "status"
+            ).innerText =
+                "LISTENING...";
+
+        };
+
+
+    recognition.onresult =
+        function(event) {
+
+            document.getElementById(
+                "problem"
+            ).value =
+                event.results[0][0].transcript;
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            document.getElementById(
+                "status"
+            ).innerText =
+                "SYSTEM ONLINE";
+
+        };
+
+}
+
+
+function startVoice() {
+
+    if (!recognition) {
+
+        document.getElementById(
+            "answer"
+        ).innerText =
+            "Голосовой ввод не поддерживается этим браузером.";
+
+        return;
 
     }
 
+    recognition.start();
+
+}
+
+
+/* ==================================================
+   РУЛЕТКА
+================================================== */
+
+let rouletteRotation = 0;
+
+let rouletteSpinning = false;
+
+
+/* ОТКРЫТЬ */
+
+function openRoulette() {
+
+    document.getElementById(
+        "rouletteWindow"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "problemWindow"
+    ).style.display =
+        "none";
+
+}
+
+
+/* ЗАКРЫТЬ */
+
+function closeRoulette() {
+
+    document.getElementById(
+        "rouletteWindow"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "problemWindow"
+    ).style.display =
+        "block";
+
+}
+
+
+/* ==================================================
+   ТЕКСТ НА КОЛЕСЕ
+================================================== */
+
+function updateRouletteText() {
+
+    const item =
+        document.getElementById(
+            "rouletteItem"
+        ).value.trim();
+
+
+    const texts =
+        document.querySelectorAll(
+            ".sectorText"
+        );
+
+
+    const displayText =
+        item === ""
+        ? "ПРЕДМЕТ"
+        : item;
+
+
+    texts.forEach(function(text) {
+
+        text.innerText =
+            displayText;
+
+    });
+
+}
+
+
+document.getElementById(
+    "rouletteItem"
+).addEventListener(
+    "input",
+    updateRouletteText
+);
+
+
+/* ==================================================
+   КРУТИТЬ
+================================================== */
+
+function spinRoulette() {
+
+    if (rouletteSpinning)
+        return;
+
+
+    const item =
+        document.getElementById(
+            "rouletteItem"
+        ).value.trim();
+
+
+    const result =
+        document.getElementById(
+            "rouletteResult"
+        );
+
+
+    const wheel =
+        document.getElementById(
+            "rouletteWheel"
+        );
+
+
+    if (item === "") {
+    result.className = "";
+    result.innerText = "Сначала напиши свою проблему.";
+    return;
+}
+
+    rouletteSpinning = true;
+
+
+    result.className = "";
+
+    result.innerText =
+        "🎰 РУЛЕТКА КРУТИТСЯ...";
+
+
+    /*
+       Виртуальные коэффициенты:
+
+       ×0 — 50%
+       ×1 — 30%
+       ×2 — 13%
+       ×3 — 5%
+       ×5 — 2%
+    */
+
+    const random =
+        Math.random();
+
+
+    let multiplier;
+
+
+    if (random < 0.50) {
+
+        multiplier = 0;
+
+    }
+
+    else if (random < 0.80) {
+
+        multiplier = 1;
+
+    }
+
+    else if (random < 0.93) {
+
+        multiplier = 2;
+
+    }
+
+    else if (random < 0.98) {
+
+        multiplier = 3;
+
+    }
+
+    else {
+
+        multiplier = 5;
+
+    }
+
+
+    /*
+       Несколько оборотов.
+    */
+
+    const extraRotation =
+        1800 +
+        Math.floor(
+            Math.random() * 360
+        );
+
+
+    rouletteRotation +=
+        extraRotation;
+
+
+    wheel.style.transform =
+        "rotate(" +
+        rouletteRotation +
+        "deg)";
+
+
+    setTimeout(function() {
+
+        if (multiplier === 0) {
+
+            result.className =
+                "rouletteLose";
+
+            result.innerText =
+                "💀 ВХВХХВ ЕБАТЬ ТЫ ПРОИГРАЛ!\n\n" +
+                "Твой предмет: " +
+                item +
+                "\nКоэффициент: ×0";
+
+        }
+
+        else {
+
+            result.className =
+                "rouletteWin";
+
+            result.innerText =
+                "🎉 ТЫ ВЫИГРАЛ УЁБИЩЕ ПОШЁЛ НАХУЙ!\n\n" +
+                "Твой предмет: " +
+                item +
+                "\nКоэффициент: ×" +
+                multiplier;
+
+        }
+
+
+        rouletteSpinning =
+            false;
+
+    }, 4300);
+
+}
+
 </script>
-```
 
 </body>
+
 </html>
