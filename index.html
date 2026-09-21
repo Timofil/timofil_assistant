@@ -730,12 +730,71 @@ textarea {
     text-shadow: 0 0 20px #ff3355;
 }
 
+
+/* ==================================================
+   BLACKJACK
+================================================== */
+#blackjackWindow{display:none;margin:30px auto;padding:25px;width:95%;max-width:650px;background:#0b1018;border:1px solid #00eaff;border-radius:15px;box-shadow:0 0 30px rgba(0,234,255,.2)}
+#blackjackWindow input{width:90%;max-width:450px;text-align:center;font-size:16px}
+.blackjackTable{margin:20px auto;padding:18px;background:#071018;border:1px solid #00eaff;border-radius:15px}
+.blackjackTitle{color:#8eefff;letter-spacing:2px;margin-bottom:10px}
+.blackjackCards{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;min-height:75px;margin:10px 0}
+.blackjackCard{width:52px;height:72px;background:#f5f5f5;color:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:bold;box-shadow:0 0 12px rgba(0,234,255,.25)}
+.blackjackCard.red{color:#d22}
+.blackjackCard.hidden{background:#080b12;color:#00eaff;border:2px solid #00eaff}
+.blackjackScore{color:#00eaff;font-weight:bold;min-height:24px}
+#blackjackResult{min-height:70px;margin-top:15px;color:#00eaff;font-size:20px;font-weight:bold;white-space:pre-line}
+.blackjackWin{color:#00ff88!important;text-shadow:0 0 20px #00ff88}
+.blackjackLose{color:#ff3355!important;text-shadow:0 0 20px #ff3355}
+.blackjackInput{margin-top:10px}
+
+
+/* ==================================================
+   ВЫДВИЖНОЕ МЕНЮ
+================================================== */
+#menuButton{position:fixed;top:25px;left:25px;width:65px;height:65px;padding:0;margin:0;border:2px solid #00eaff;border-radius:15px;background:#080b12;color:#00eaff;font-size:34px;line-height:1;z-index:1002;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,background .2s ease,box-shadow .2s ease;}
+#menuButton.menuReady{opacity:1;visibility:visible;pointer-events:auto;}
+#menuButton:hover{background:#00eaff;color:#05070b;box-shadow:0 0 25px #00eaff;}
+#sideMenu{position:fixed;top:0;left:0;width:280px;height:100vh;padding:105px 20px 25px;background:#080b12;border-right:1px solid #00eaff;box-shadow:0 0 35px rgba(0,234,255,.25);transform:translateX(-100%);transition:transform .35s ease;z-index:1001;text-align:left;}
+#sideMenu.open{transform:translateX(0);}
+#sideMenu h2{margin:0 0 20px;color:#00eaff;text-shadow:0 0 12px #00eaff;letter-spacing:2px;}
+#sideMenu .menuItem{
+    display:block;
+    width:100%;
+    margin:10px 0;
+    text-align:left;
+    font-size:16px;
+    padding:14px 16px;
+}
+#sideMenu .menuItem:hover{
+    transform:translateX(4px);
+}
+
+#sideMenu p{color:#8eefff;line-height:1.5;}
+#menuOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);opacity:0;visibility:hidden;transition:opacity .35s ease;z-index:1000;}
+#menuOverlay.open{opacity:1;visibility:visible;}
+
 </style>
 
 </head>
 
 
 <body>
+
+<!-- ==================================================
+     ВЫДВИЖНОЕ МЕНЮ
+================================================== -->
+<button id="menuButton" aria-label="Открыть меню" onclick="toggleMenu()">☰</button>
+<div id="menuOverlay" onclick="closeMenu()"></div>
+<div id="sideMenu">
+    <h2>☰ TIMAFIL MENU</h2>
+
+    <button class="menuItem" onclick="goHome()">🏠 ГЛАВНАЯ</button>
+    <button class="menuItem" onclick="goGames()">🎮 ИГРЫ</button>
+    <button class="menuItem" onclick="showEmptySection('📰 НОВОСТИ')">📰 НОВОСТИ</button>
+    <button class="menuItem" onclick="showEmptySection('🛠️ ТЕХ ПОДДЕРЖКА')">🛠️ ТЕХ ПОДДЕРЖКА</button>
+</div>
+
 
 
 <!-- ==================================================
@@ -1060,6 +1119,41 @@ textarea {
 
     </div>
 
+
+    <!-- ==================================================
+         BLACKJACK
+    ================================================== -->
+
+    <button onclick="openBlackjack()">
+        🃏 ОТКРЫТЬ BLACKJACK
+    </button>
+
+    <div id="blackjackWindow">
+        <h2>🃏 TIMAFIL BLACKJACK</h2>
+        <p>21 — твоя цель. Победи дилера.</p>
+
+        <input id="blackjackText" class="blackjackInput" type="text" maxlength="40" placeholder="Напиши текст раунда...">
+
+        <div class="blackjackTable">
+            <div class="blackjackTitle">🤖 ДИЛЕР</div>
+            <div id="dealerCards" class="blackjackCards"></div>
+            <div id="dealerScore" class="blackjackScore"></div>
+        </div>
+
+        <div class="blackjackTable">
+            <div class="blackjackTitle">🧑 ТЫ</div>
+            <div id="playerCards" class="blackjackCards"></div>
+            <div id="playerScore" class="blackjackScore"></div>
+        </div>
+
+        <button onclick="blackjackHit()">🃏 ВЗЯТЬ КАРТУ</button>
+        <button onclick="blackjackStand()">✋ ОСТАНОВИТЬСЯ</button>
+        <button onclick="startBlackjack()">🔄 НОВАЯ ИГРА</button>
+        <button onclick="closeBlackjack()">ЗАКРЫТЬ</button>
+
+        <div id="blackjackResult"></div>
+    </div>
+
 </div>
 
 
@@ -1088,6 +1182,7 @@ setTimeout(function() {
         loading.style.display = "none";
 
         main.style.display = "block";
+        document.getElementById("menuButton").classList.add("menuReady");
 
     }, 1000);
 
@@ -1525,6 +1620,158 @@ function spinRoulette() {
 
     }, 4300);
 
+}
+
+
+/* ==================================================
+   BLACKJACK
+================================================== */
+
+let blackjackDeck=[];
+let playerHand=[];
+let dealerHand=[];
+let blackjackActive=false;
+
+function createBlackjackDeck(){
+    const suits=['♠','♥','♦','♣'];
+    const ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    const deck=[];
+    suits.forEach(function(suit){
+        ranks.forEach(function(rank){
+            deck.push({rank:rank,suit:suit});
+        });
+    });
+    return deck;
+}
+
+function shuffleBlackjackDeck(deck){
+    for(let i=deck.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [deck[i],deck[j]]=[deck[j],deck[i]];
+    }
+    return deck;
+}
+
+function getCardValue(card){
+    if(['J','Q','K'].includes(card.rank)) return 10;
+    if(card.rank==='A') return 11;
+    return Number(card.rank);
+}
+
+function calculateBlackjackScore(hand){
+    let score=0;
+    let aces=0;
+    hand.forEach(function(card){
+        score+=getCardValue(card);
+        if(card.rank==='A') aces++;
+    });
+    while(score>21 && aces>0){
+        score-=10;
+        aces--;
+    }
+    return score;
+}
+
+function renderBlackjackCard(card,hidden){
+    if(hidden) return '<div class="blackjackCard hidden">?</div>';
+    const red=(card.suit==='♥'||card.suit==='♦')?' red':'';
+    return '<div class="blackjackCard'+red+'">'+card.rank+card.suit+'</div>';
+}
+
+function renderBlackjack(hideDealerCard){
+    document.getElementById('playerCards').innerHTML=playerHand.map(function(card){return renderBlackjackCard(card,false);}).join('');
+    document.getElementById('dealerCards').innerHTML=dealerHand.map(function(card,index){return renderBlackjackCard(card,hideDealerCard&&index===1);}).join('');
+    document.getElementById('playerScore').innerText='Очки: '+calculateBlackjackScore(playerHand);
+    document.getElementById('dealerScore').innerText=hideDealerCard?'Очки: ?':('Очки: '+calculateBlackjackScore(dealerHand));
+}
+
+function openBlackjack(){
+    document.getElementById('blackjackWindow').style.display='block';
+    document.getElementById('problemWindow').style.display='none';
+    document.getElementById('rouletteWindow').style.display='none';
+    startBlackjack();
+}
+
+function closeBlackjack(){
+    document.getElementById('blackjackWindow').style.display='none';
+    document.getElementById('problemWindow').style.display='block';
+}
+
+function startBlackjack(){
+    blackjackDeck=shuffleBlackjackDeck(createBlackjackDeck());
+    playerHand=[blackjackDeck.pop(),blackjackDeck.pop()];
+    dealerHand=[blackjackDeck.pop(),blackjackDeck.pop()];
+    blackjackActive=true;
+    document.getElementById('blackjackResult').className='';
+    document.getElementById('blackjackResult').innerText='';
+    renderBlackjack(true);
+}
+
+function blackjackHit(){
+    if(!blackjackActive) return;
+    playerHand.push(blackjackDeck.pop());
+    const score=calculateBlackjackScore(playerHand);
+    renderBlackjack(true);
+    if(score>21){
+        finishBlackjack('lose','💥 Перебор! У тебя '+score+' очков.');
+    }else if(score===21){
+        blackjackStand();
+    }
+}
+
+function blackjackStand(){
+    if(!blackjackActive) return;
+    while(calculateBlackjackScore(dealerHand)<17){
+        dealerHand.push(blackjackDeck.pop());
+    }
+    const playerScore=calculateBlackjackScore(playerHand);
+    const dealerScore=calculateBlackjackScore(dealerHand);
+    renderBlackjack(false);
+    if(dealerScore>21 || playerScore>dealerScore){
+        finishBlackjack('win','🎉 Ты победил!\nТвои очки: '+playerScore+'\nОчки дилера: '+dealerScore);
+    }else if(playerScore===dealerScore){
+        finishBlackjack('draw','🤝 Ничья!\nУ обоих по '+playerScore+' очков.');
+    }else{
+        finishBlackjack('lose','💀 Дилер победил.\nТвои очки: '+playerScore+'\nОчки дилера: '+dealerScore);
+    }
+}
+
+function finishBlackjack(type,message){
+    blackjackActive=false;
+    const result=document.getElementById('blackjackResult');
+    result.className=type==='win'?'blackjackWin':(type==='lose'?'blackjackLose':'');
+    result.innerText=message;
+}
+
+
+/* ==================================================
+   МЕНЮ
+================================================== */
+function toggleMenu(){
+    const menu=document.getElementById("sideMenu");
+    const overlay=document.getElementById("menuOverlay");
+    menu.classList.toggle("open");
+    overlay.classList.toggle("open");
+}
+
+function closeMenu(){
+    document.getElementById("sideMenu").classList.remove("open");
+    document.getElementById("menuOverlay").classList.remove("open");
+}
+
+function goHome(){
+    closeMenu();
+    document.getElementById("mainContent").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function goGames(){
+    closeMenu();
+    document.getElementById("rouletteWindow").scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function showEmptySection(title){
+    closeMenu();
+    alert(title + "\n\nЭтот раздел пока пустой. Добавим его позже 👀");
 }
 
 </script>
